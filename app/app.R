@@ -8,6 +8,9 @@ library(stringr)
 library(dplyr)
 library(commonmark)
 
+# Expose project root as static assets so the opening video can be served
+shiny::addResourcePath("static", getwd())
+
 # Utility to read corpus from uploaded file or bundled excerpt
 read_corpus <- function(uploaded_path = NULL, max_chars = 20000) {
   if (!is.null(uploaded_path) && file.exists(uploaded_path)) {
@@ -84,6 +87,18 @@ ui <- page_sidebar(
                   placeholder = "例如：近期压力大、睡眠差，如何调养？"),
     fileInput("corpus", "上传《黄帝内经》全文(.txt，选填)", accept = ".txt"),
     actionButton("generate", "生成建议", class = "btn-primary")
+  ),
+  # Opening animation video (looping, muted, autoplay)
+  card(
+    tags$video(
+      src = "static/openingvideo.mp4",
+      autoplay = NA,
+      loop = NA,
+      muted = NA,
+      playsinline = NA,
+      preload = "auto",
+      style = "width: 100%; height: auto; border-radius: 8px;"
+    )
   ),
   card(
     card_header("答复"),

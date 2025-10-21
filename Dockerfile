@@ -11,6 +11,7 @@ WORKDIR /app
 
 COPY app /app
 COPY data /app/data
+COPY openingvideo.mp4 /app/openingvideo.mp4
 
 ENV PORT=8080
 EXPOSE 8080
