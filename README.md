@@ -47,9 +47,9 @@ R -e "shiny::runApp('app.R', port=3838, host='0.0.0.0')"
 
 ```bash
 docker build -t huangdineijing-shiny .
-docker run -p 8080:8080 -e PORT=8080 huangdineijing-shiny
+docker run -p 3838:3838 huangdineijing-shiny
 
-# 访问 http://localhost:8080
+# 访问 http://localhost:3838
 ```
 
 ## 文件说明
