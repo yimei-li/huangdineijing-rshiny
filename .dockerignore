@@ -13,4 +13,7 @@ node_modules/
 dist/
 target/
 .cache/
-
+*.mp4
+README.md
+data/
+app/
