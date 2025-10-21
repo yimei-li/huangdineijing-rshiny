@@ -13,15 +13,10 @@ RUN mkdir -p /srv/shiny-server/app && \
       cp /workspace/app/app.R /srv/shiny-server/app/app.R; \
     else \
       echo "No app.R found in repository root or app/" && ls -la /workspace && exit 1; \
-    fi
+    fi && \
+    printf '<!doctype html><html><head><meta http-equiv="refresh" content="0; url=/app/"></head><body>Redirecting to <a href="/app/">/app/</a>...</body></html>' > /srv/shiny-server/index.html
 
-# Copy video asset if present
-RUN if [ -f /workspace/openingvideo.mp4 ]; then \
-      cp /workspace/openingvideo.mp4 /srv/shiny-server/app/openingvideo.mp4; \
-    fi
-
-# Use custom Shiny Server config to serve app at root '/'
-COPY shiny-server.conf /etc/shiny-server/shiny-server.conf
+# Use default Shiny Server config (no custom conf)
 
 # Expose Shiny Server default port
 EXPOSE 3838
