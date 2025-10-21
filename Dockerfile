@@ -17,5 +17,3 @@ ENV PORT=8080
 EXPOSE 8080
 
 CMD ["R", "-e", "port <- as.numeric(Sys.getenv('PORT','8080')); shiny::runApp('/app', host='0.0.0.0', port=port)"]
-
-
