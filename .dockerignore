@@ -1,0 +1,11 @@
+.git
+.gitignore
+.env
+*.Rproj
+.Rproj.user
+.DS_Store
+.cursor/
+.idea/
+.vscode/
+README_local.md
+
