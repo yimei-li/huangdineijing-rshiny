@@ -87,7 +87,12 @@ ui <- fluidPage(
         
         div(class = "output-panel",
           div(class = "section-title", "《黄帝内经》个性化建议"),
-          uiOutput("advice_output")
+          uiOutput("advice_output"),
+          tags$div(style = "margin-top:16px;",
+            tags$video(src = "openingvideo.mp4", type = "video/mp4",
+              autoplay = NA, muted = NA, loop = NA, controls = NA,
+              style = "width:100%; border-radius:8px; background:#000;")
+          )
         )
       )
     )

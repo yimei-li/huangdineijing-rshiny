@@ -17,6 +17,11 @@ RUN mkdir -p /srv/shiny-server/app && \
     # Redirect root path to /app
     printf '<!doctype html><html><head><meta http-equiv="refresh" content="0; url=/app/"></head><body>Redirecting to <a href="/app/">/app/</a>...</body></html>' > /srv/shiny-server/index.html
 
+# Copy video asset if present
+RUN if [ -f /workspace/openingvideo.mp4 ]; then \
+      cp /workspace/openingvideo.mp4 /srv/shiny-server/app/openingvideo.mp4; \
+    fi
+
 # Expose Shiny Server default port
 EXPOSE 3838
 
