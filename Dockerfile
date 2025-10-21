@@ -13,7 +13,9 @@ RUN mkdir -p /srv/shiny-server/app && \
       cp /workspace/app/app.R /srv/shiny-server/app/app.R; \
     else \
       echo "No app.R found in repository root or app/" && ls -la /workspace && exit 1; \
-    fi
+    fi && \
+    # Redirect root path to /app
+    printf '<!doctype html><html><head><meta http-equiv="refresh" content="0; url=/app/"></head><body>Redirecting to <a href="/app/">/app/</a>...</body></html>' > /srv/shiny-server/index.html
 
 # Expose Shiny Server default port
 EXPOSE 3838

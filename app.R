@@ -70,7 +70,7 @@ ui <- fluidPage(
           actionButton("generate", "生成建议", class = "generate-btn"),
           
           div(class = "api-status",
-            HTML(paste0("API 状态: <strong>", llm_api_key, "</strong>"))
+            HTML(paste0("API 状态: <strong>", if (identical(llm_api_key, "待定") || !nzchar(llm_api_key)) "待定" else "已配置", "</strong>"))
           )
         )
       ),
@@ -81,7 +81,7 @@ ui <- fluidPage(
           textAreaInput("concern", NULL,
             width = "100%",
             height = "120px",
-            placeholder = "请详细描述您的健康问题，例如：\n• 睡眠困难、早醒、多梦\n• 长期疲劳、精神不振\n• 胃肠不适、消化不良\n• 眼睛干涩、视力模糊\n• 鼻过敏、季节性不适\n• 经期不调、痛经\n• 术后调理、肿瘤康复\n• 情绪焦虑、压力大\n\n建议说明：症状起止时间、诱发因素、伴随症状、昼夜/季节规律等"
+            placeholder = "请详细描述您的健康问题，例如：\n• 睡眠困难、早醒、多梦\n• 长期疲劳、精神不振\n• 胃肠不适、消化不良\n• 眼睛干涩、视力模糊\n• 鼻过敏、季节性不适\n• 经期不调、痛经\n• 癌症随访/治疗副作用\n• 术后调理、肿瘤康复\n• 情绪焦虑、压力大\n\n建议说明：症状起止时间、诱发因素、伴随症状、昼夜/季节规律等"
           )
         ),
         
@@ -157,9 +157,10 @@ server <- function(input, output, session) {
         paste(conditions_cn[input$conditions], collapse = "、")
       } else { "" }
       
+      # 示例原文（可替换为接入大模型后的动态原文）
       original <- "上古之人，其知道者，法于阴阳，和于术数，食饮有节，起居有常，不妄作劳，故能形与神俱，而尽终其天年，度百岁乃去。"
       
-      translation <- "古代懂得养生之道的人，遵循自然阴阳规律，顺应四时变化，饮食有节制，作息有规律，不过度劳累，所以能够身心和谐，享尽天年，活到百岁以上。"
+      translation <- "古代懂得养生之道的人，遵循自然阴阳规律，顺应四时变化，饮食有节制，作息有规律，不过度劳累，所以能够身心和谐，享尽天年。"
       
       personalized <- paste0(
         "根据您的情况（", input$region, "，", input$age, "岁，", gender_text, "，压力 ", input$stress, "/10）",
@@ -170,7 +171,7 @@ server <- function(input, output, session) {
         "建议您从以下三个方面调整：\n\n",
         "【作息调理】建议在晚上23:00前入睡，顺应子午流注，让肝胆在最佳时段修复。早晨适度舒展身体，接触自然光线。\n\n",
         "【情志养护】每日安排10-15分钟静心时光，可以是缓步行走、深呼吸或冥想，帮助疏解压力，调畅气机。\n\n",
-        "【饮食调养】以温热清淡为主，七分饱即可；减少辛辣、酒精、咖啡因；晚餐尽量在睡前3小时完成，减轻脾胃负担。\n\n",
+        "【饮食调养】以温热清淡为主，七分饱；减少辛辣、酒精、咖啡因；晚餐在睡前≥3小时完成，减轻脾胃负担。\n\n",
         "若症状持续或加重，请及时寻求专业医师面诊评估。愿您身心安康，顺时养生。"
       )
       
