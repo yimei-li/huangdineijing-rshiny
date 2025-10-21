@@ -1,11 +1,16 @@
 .git
 .gitignore
-.env
-*.Rproj
-.Rproj.user
+.github/
+.Rhistory
+.RData
+.Rproj.user/
 .DS_Store
-.cursor/
-.idea/
 .vscode/
-README_local.md
+.idea/
+.cursor/
+.agent-tools/
+node_modules/
+dist/
+target/
+.cache/
 

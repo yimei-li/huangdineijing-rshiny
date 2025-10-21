@@ -1,37 +1,43 @@
-## Huangdi Neijing Shiny App (Railway-ready)
+## 黄帝内经 · 个性化健康建议（R Shiny）
 
-### What this is
-- A minimal R Shiny app that collects health-related inputs and asks a model to answer in the style/structure inspired by Huangdi Neijing: original quote, translation, and personalized guidance.
-- Dockerized for easy Railway deployment (listens on `PORT`, default 8080).
+This repository contains an R Shiny app that provides empathic, concise advice inspired by Huangdi Neijing based on user inputs. It shows a looping startup video (`openingvideo.mp4`) and renders structured output (original text, translation, personalized advice). No LLM API key is required to run; a placeholder response is returned until `LLM_API_KEY` is configured.
 
-### Local run (Docker)
-1. Create `.env` from `.env.sample` and set `OPENAI_API_KEY` (and optional `OPENAI_BASE_URL`, `OPENAI_MODEL`).
-2. Build: `docker build -t hdnj-shiny .`
-3. Run: `docker run --rm -p 8080:8080 --env-file .env hdnj-shiny`
-4. Open: `http://localhost:8080`
+### Project layout
+- `app/app.R`: Shiny app (binds to `0.0.0.0` and `PORT`)
+- `openingvideo.mp4`: Startup modal looping video
+- `data/huangdi_neijing_full.txt` (optional): If present, used as context
 
-### Deploy to Railway
-You can use either GitHub integration or direct CLI deploy. GitHub is simpler and recommended.
+### Run locally (R)
+```r
+shiny::runApp('app', host = '0.0.0.0', port = 3838)
+```
 
-#### Option A: GitHub → Railway (recommended)
-1. Push this folder to a new GitHub repository.
-2. In Railway dashboard: New Project → GitHub Repository → select your repo.
-3. Railway will detect the Dockerfile automatically.
-4. In Project → Variables, add:
-   - `OPENAI_API_KEY = your-key`
-   - (optional) `OPENAI_BASE_URL` and `OPENAI_MODEL`
-5. Deploy. After build completes, open the generated URL. Railway sets `PORT` automatically.
+### Docker
+Build and run the container locally:
+```bash
+docker build -t huangdineijing-shiny .
+docker run -p 3838:3838 -e PORT=3838 --name hdnj huangdineijing-shiny
+```
+App will be available at `http://localhost:3838`.
 
-#### Option B: Railway CLI
-1. Install Railway CLI and login.
-2. Run in this directory:
-   - `railway up` (or `railway run` depending on your workflow). Ensure Variables above are set in the project.
+### Railway deployment
+This repo includes a `Dockerfile`, so Railway will use Docker to build and run the service.
 
-### App usage
-- Optionally upload a `.txt` file containing the full Huangdi Neijing text to improve quotations. Without it, the app uses a short public-domain excerpt in `data/huangdi_neijing_excerpt.txt`.
-- Fill inputs, write your health question, click "生成建议".
+Option A: Railway Dashboard
+1. Connect repo (`yimei-li/huangdineijing-rshiny`).
+2. Railway auto-detects the Dockerfile. No special build command is needed.
+3. Ensure service exposes the `PORT` environment variable (Railway sets it automatically). No manual port mapping required.
+4. Deploy. After build, open the service URL.
+5. Optional: Add environment variable `LLM_API_KEY` later when you have a key.
+
+Option B: Railway CLI
+```bash
+railway link   # link local folder to your Railway project
+railway up     # build and deploy using the Dockerfile
+```
 
 ### Notes
-- This app calls an OpenAI-compatible Chat Completions endpoint via `httr2`. You can point `OPENAI_BASE_URL` to a compatible provider if desired.
-- The model output is rendered as HTML via `commonmark`.
+- The app serves `openingvideo.mp4` via a static resource path so it works whether the working directory is the project root or `app/`.
+- If you later add the full text file, place it at `data/huangdi_neijing_full.txt` (UTF-8).
+
 
